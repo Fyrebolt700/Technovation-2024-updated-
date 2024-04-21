@@ -48,6 +48,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
+  cupertino_icons: ^1.0.6
+  google_nav_bar: ^5.0.6
+  line_icons: ^2.0.2
+  http: ^0.13.3
+  url_launcher: ^6.2.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

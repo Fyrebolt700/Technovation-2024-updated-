@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'quiz.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
 
 
 //This styles the homepage
@@ -15,9 +18,11 @@ class HomeStyle extends StatelessWidget {
           title: Text('Homepage')
         ),
         body: Center(
+         
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              
               SizedBox(height: 50),
               Icon(
                 Icons.female,
@@ -31,6 +36,8 @@ class HomeStyle extends StatelessWidget {
                   fontSize: 40,
                 )
                 ),
+                
+              
               SizedBox(height:30),
               Container(
                 width:450,
@@ -41,11 +48,43 @@ class HomeStyle extends StatelessWidget {
                   ),
                 ),
               )
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Quiz())
+                  );
+                  print('Button Pressed!');
+                },
+                child: Text('Screening Tool'),
+                
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _launchExternalLink('https://partyrock.aws/u/fyrebolt700/P0NKvlIYC/Postpartum-Wellness-Companion');
+                  
+                },
+                
+                child: Text('AI Chat bot'),
+                
               )
             ],
           )
+        
         ),
-        ),
+      ),
     );
+  }
+
+  void _launchExternalLink(String url) async {
+  if (await canLaunchUrlString(url)) {
+       await launchUrlString(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
+    }
   }
 }

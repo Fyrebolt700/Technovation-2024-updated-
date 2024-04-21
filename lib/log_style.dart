@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'mood_scale.dart';
 
 //Styles the log page
 //Stateful to update date picked by user
@@ -31,7 +32,8 @@ class _LogStyleState extends State<LogStyle> {
       context,
       MaterialPageRoute(
         //When user clicks date, goes to new page
-        builder: (context) => SelectedDatePage(selectedDate: _selectedDate),
+        builder: (context) => MoodScale(),
+       // builder: (context) => SelectedDatePage(selectedDate: _selectedDate),
       )
     );
   }
@@ -42,14 +44,27 @@ class _LogStyleState extends State<LogStyle> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('flutter'),
+          title: Text('Daily Log'),
         ),
         body: Center(
-          child: ElevatedButton(
-            onPressed: (){
-              _datePicker();
-            },
-            child: const Text('press me'),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:  [
+              // ignore: prefer_const_constructors
+              Text(
+                'Track your symptoms daily and maintain a daily mental health journal',
+                style: TextStyle(
+                  fontSize: 16,
+                )
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: (){
+                   _datePicker();
+                  },
+            child: const Text('Calendar'),
+          ),
+            ],
           ),
         ),
       ),

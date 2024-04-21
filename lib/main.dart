@@ -6,6 +6,8 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'home_style.dart';
 import 'news_style.dart';
 import 'log_style.dart';
+import 'resources_style.dart';
+
 
 //main page that links to other pages
 //main page has no independatn function
@@ -53,6 +55,7 @@ class _HomePageState extends State<HomePage> {
     HomeStyle(),
     NewsStyle(),
     LogStyle(),
+    ResourcesStyle(),
 
     Text('Resources',
     style: optionStyle,

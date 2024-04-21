@@ -8,7 +8,8 @@ class NewsStyle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:Text('Article Page')
+        title:Text('Article Page'),
+        automaticallyImplyLeading: false,
       ),
       body: Align(
         alignment: Alignment(0.9, -0.6),
@@ -16,7 +17,7 @@ class NewsStyle extends StatelessWidget {
             onTap: (){
               Navigator.push(
                 context,
-                //when article button is pushed, goes to articles.dart
+                //when article button is pushed, goes to article
                 MaterialPageRoute(builder: (context) => ArticleOne())
               );
             },
@@ -69,15 +70,6 @@ class ArticleOne extends StatelessWidget {
       appBar: AppBar(
         title:Text('Article'),
       ),
-      // body:Center(
-      //   child: ElevatedButton(
-      //     child: Text("back"),
-      //     onPressed: (){
-      //       Navigator.pop(context);
-      //     }
-      //   ),
-      // )
-
     );
   }
 }
