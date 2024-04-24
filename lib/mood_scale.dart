@@ -13,7 +13,19 @@ class MoodScale extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MoodScaleScreen(),
+      home: Scaffold(
+        // appBar: AppBar(
+        //   title: Text(
+        //     'Mood Scale',
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.bold,
+        //     ),
+        //   ),
+        //   centerTitle: true,
+        //   backgroundColor: const Color(0xFFE46D86),
+        // ),
+        body: MoodScaleScreen(),
+      ),
     );
   }
 }
@@ -24,7 +36,7 @@ class MoodScaleScreen extends StatefulWidget {
 }
 
 class _MoodScaleScreenState extends State<MoodScaleScreen> {
-   TextEditingController _textEditingController = TextEditingController();
+  TextEditingController _textEditingController = TextEditingController();
 
   double _selectedMoodValue = 3.0; // Default mood value
   List<String> _moods = [
@@ -48,14 +60,12 @@ class _MoodScaleScreenState extends State<MoodScaleScreen> {
       appBar: AppBar(
         title: Text('Mood Scale'),
         leading: IconButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage())
-            );
+                context, MaterialPageRoute(builder: (context) => HomePage()));
           },
           icon: Icon(Icons.arrow_back),
-        )
+        ),
       ),
       body: Center(
         child: Column(
@@ -76,31 +86,23 @@ class _MoodScaleScreenState extends State<MoodScaleScreen> {
               moodColors: _moodColors,
               divisions: _moods.length - 1,
             ),
+            SizedBox(height: 20.0),
+            Text(
+              'Tell us more about your day:',
+              style: TextStyle(fontSize: 16.0),
+            ),
             SizedBox(
-            width: 300.0, // Set the width of the text field
-            height: 100.0, // Set the height of the text field
-            child: TextField(
-              controller: _textEditingController,
-              maxLines: null,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter text',
-                labelText: 'Journal your thoughts',
-                
-              ),
-            ),
-            ),
-            
-            /*
-            
-            TextField(
+              width: 300.0, // Set the width of the text field
+              height: 100.0, // Set the height of the text field
+              child: TextField(
                 controller: _textEditingController,
+                maxLines: null,
                 decoration: InputDecoration(
-                  labelText: 'Journal',
                   border: OutlineInputBorder(),
+                  hintText: 'What made you feel this way?',
                 ),
               ),
-            */
+            ),
             SizedBox(height: 20.0),
             Text(
               'Selected Mood: ${_moods[_selectedMoodValue.toInt()]}',
@@ -114,7 +116,7 @@ class _MoodScaleScreenState extends State<MoodScaleScreen> {
                 // or perform any other action based on the mood.
                 print('Selected mood: ${_moods[_selectedMoodValue.toInt()]}');
                 print('Entered text: $enteredText');
-                },
+              },
               child: Text('Save'),
             ),
           ],
@@ -161,7 +163,7 @@ class _MoodSliderState extends State<MoodSlider> {
           });
         },
         min: 0,
-        max: (widget.moodColors.length-1).toDouble(),
+        max: (widget.moodColors.length - 1).toDouble(),
         divisions: widget.divisions,
         activeColor: _getColor(_value.toInt(), widget.moodColors),
       ),

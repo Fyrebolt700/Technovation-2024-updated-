@@ -1,11 +1,4 @@
-
-
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'main.dart';
 
 class Quiz extends StatelessWidget {
@@ -18,9 +11,7 @@ class Quiz extends StatelessWidget {
 }
 
 class Questionnaire extends StatefulWidget {
-
   @override
-  // ignore: library_private_types_in_public_api
   _QuestionnaireState createState() => _QuestionnaireState();
 }
 
@@ -28,15 +19,22 @@ class _QuestionnaireState extends State<Questionnaire> {
   int _currentQuestionIndex = 0;
   final List<Map<String, dynamic>> _questions = [
     {
+      'question':
+          'Please answer these questions based on how you felt the past 7 days, not just today. This is a screening test; not a medical diagnosis. If something doesn’t seem right, call your health care provider regardless of your score.',
+      'options': [
+        {'number': 0, 'text': 'Begin'}
+      ]
+    },
+    {
       'question': 'I have been able to laugh and see the funny side of things:',
       'options': [
-        {'number':0, 'text':'As much as I always could'},
-        {'number':1, 'text':'Not quite so much now'},
-        {'number':2, 'text':'Definitely not so much now'},
-        {'number':3, 'text':'Not at all'}
-        ]
+        {'number': 0, 'text': 'As much as I always could'},
+        {'number': 1, 'text': 'Not quite so much now'},
+        {'number': 2, 'text': 'Definitely not so much now'},
+        {'number': 3, 'text': 'Not at all'}
+      ]
     },
-    {'question': 'I have looked forward with enjoyment to things:',
+     {'question': 'I have looked forward with enjoyment to things:',
       'options': [
         {'number':0, 'text':'As much as I ever did'},
         {'number':1, 'text':'Rather less than I used to'},
@@ -116,45 +114,54 @@ class _QuestionnaireState extends State<Questionnaire> {
         {'number':0, 'text':'Never'}
        ]
     }
-
+    // Add other questions here...
   ];
 
   int? _selectedOptionIndex;
   num score = 0;
 
- void _selectOption(int optionIndex) {
+  void _selectOption(int optionIndex) {
     setState(() {
       if (_selectedOptionIndex == optionIndex) {
-        // If the same option is selected again, deselect it
         _selectedOptionIndex = null;
         score -= _questions[_currentQuestionIndex]['options'][optionIndex]['number'];
       } else {
-        // Deselect the previously selected option (if any)
         if (_selectedOptionIndex != null) {
           score -= _questions[_currentQuestionIndex]['options'][_selectedOptionIndex!]['number'];
         }
-        // Select the new option
         _selectedOptionIndex = optionIndex;
         score += _questions[_currentQuestionIndex]['options'][optionIndex]['number'];
+      }
+      // Ensure the score doesn't exceed 30
+      if (score > 30) {
+        score = 30;
       }
     });
   }
 
   void _nextQuestion() {
     setState(() {
-      _currentQuestionIndex++;
-      _selectedOptionIndex = null; // Reset selected option for the next question
+      if (_currentQuestionIndex < _questions.length - 1) {
+        _currentQuestionIndex++;
+        _selectedOptionIndex = null;
+      } else {
+        // Navigate to the final screen if all questions are completed
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => FinalScreen(score: score)),
+        );
+      }
     });
   }
 
   void _previousQuestion() {
-  setState(() {
-    if (_currentQuestionIndex > 0) {
-      _currentQuestionIndex--;
-      _selectedOptionIndex = null; // Reset selected option for the previous question
-    }
-  });
-}
+    setState(() {
+      if (_currentQuestionIndex > 0) {
+        _currentQuestionIndex--;
+        _selectedOptionIndex = null;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,10 +172,9 @@ class _QuestionnaireState extends State<Questionnaire> {
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.push(
-                context,
-                //when article button is pushed, goes to article
-                MaterialPageRoute(builder: (context) => HomePage())
-              );
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
           },
         ),
       ),
@@ -180,7 +186,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                 children: [
                   Text(
                     _questions[_currentQuestionIndex]['question'],
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20, color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 20),
@@ -194,8 +200,9 @@ class _QuestionnaireState extends State<Questionnaire> {
                           margin: EdgeInsets.symmetric(vertical: 5),
                           padding: EdgeInsets.all(15),
                           decoration: BoxDecoration(
+                            color: _selectedOptionIndex == index ? Colors.pink[100] : Colors.white,
                             border: Border.all(
-                              color: _selectedOptionIndex == index ? Colors.blue : Colors.grey, // Change border color if selected
+                              color: _selectedOptionIndex == index ? Color.fromARGB(255, 239, 7, 185) : Colors.grey,
                             ),
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -204,7 +211,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 16,
-                              color: _selectedOptionIndex == index ? Colors.blue : Colors.black, // Change text color if selected
+                              color: _selectedOptionIndex == index ? Colors.white : Colors.black,
                             ),
                           ),
                         ),
@@ -216,41 +223,71 @@ class _QuestionnaireState extends State<Questionnaire> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       if (_currentQuestionIndex > 0)
-                      ElevatedButton(
-                        onPressed: _previousQuestion,
-                        child: Text('Previous')),
-                      
-                      if (_selectedOptionIndex != null) // Show next button only if an option is selected
-                      ElevatedButton(
-                        onPressed: _nextQuestion,
-                        child: Text('Next'),
-                      ),
+                        ElevatedButton(
+                          onPressed: _previousQuestion,
+                          child: Text('Previous'),
+                        ),
+                      if (_selectedOptionIndex != null)
+                        ElevatedButton(
+                          onPressed: _nextQuestion,
+                          child: Text(_currentQuestionIndex < _questions.length - 1 ? 'Next' : 'Finish'),
+                        ),
                     ],
                   ),
                 ],
               ),
             )
           : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'You have completed the screening tool',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'Score: ${score}',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height:20),
-                  Text(
-                    score > 10 ? 'Your score is over 10.' : 'Your score is under 10',
-                    style:TextStyle(fontSize: 16),
-                  )
-                ],
-              ),
+              child: CircularProgressIndicator(),
             ),
+    );
+  }
+}
+
+class FinalScreen extends StatelessWidget {
+  final num score;
+
+  const FinalScreen({Key? key, required this.score}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Final Screen'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'You have completed the screening tool',
+              style: TextStyle(fontSize: 20, color: Colors.black),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Score: $score',
+              style: TextStyle(fontSize: 16, color: Colors.black),
+            ),
+            SizedBox(height: 20),
+            Text(
+              score > 12
+                  ? 'Your score is over 12 and you may be suffering from depression and should likely seek medical attention'
+                  : 'Your score is below 12 and does not indicate any signs of depression. However, if something doesn’t seem right, call your health care provider regardless.',
+              style: TextStyle(fontSize: 16, color: Colors.black),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+              },
+              child: Text('Go Home'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
